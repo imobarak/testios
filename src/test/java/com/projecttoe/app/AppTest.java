@@ -179,7 +179,7 @@ public class AppTest {
             //wait.until(ExpectedConditions.textToBePresentInElement(element,"All Groups"));
             postDate = new SimpleDateFormat("dd-MM-YY hh:mm").format(new Date());
 
-            driver.findElementByClassName("UIATextView").sendKeys("Automated post " + postDate);
+            driver.findElementByClassName("UIATextView").sendKeys("automated post " + postDate);
             nav_bar.findElement(By.name("Post")).click();
             wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//UIANavigationBar/UIAStaticText"), "Newsfeed"));
             System.out.println("Making a new post successful");
@@ -200,7 +200,7 @@ public class AppTest {
         WebElement element = rows.get(0).findElements(By.className("UIAStaticText")).get(0);
         assertEquals(currentUser, element.getText());
         element = rows.get(0).findElements(By.className("UIAStaticText")).get(1);
-        assertEquals("Automated post " + postDate, element.getText());
+        assertEquals("automated post " + postDate, element.getText());
         System.out.println("Finding post just added successful");
 
     }
