@@ -75,14 +75,13 @@ public class AppTest {
 
         capabilities = new DesiredCapabilities();
         capabilities.setCapability("app", "/Users/imobarak/Microdoers/ipa/Project Toe.app");
-        capabilities.setCapability("appium-version", "1.0");
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("platformVersion", "9.3");
         capabilities.setCapability("deviceName", "iPhone 5");
         capabilities.setCapability("launchTimeout", 40000);
-        capabilities.setCapability("noReset", "true");
-        capabilities.setCapability("fullReset", "false");
-        capabilities.setCapability("nativeInstrumentsLib", "true");
+        capabilities.setCapability("noReset", true);
+        capabilities.setCapability("fullReset", false);
+        capabilities.setCapability("nativeInstrumentsLib", true);
 
         //capabilities.setCapability("waitForAppScript", "if (target.frontMostApp().alert().name()=='\"Project Toe\" Would Like to Send You Notifications') {$.acceptAlert(); true;}");
         driver = new IOSDriver(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
@@ -173,7 +172,7 @@ public class AppTest {
         if(nav_bar.getAttribute("name").equals("Newsfeed")) {
 
             nav_bar.findElement(By.name("Post")).click();
-            wait = new WebDriverWait(driver, 15);
+            wait = new WebDriverWait(driver, 30);
             wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//UIANavigationBar/UIAStaticText"), "All Groups"));
             WebElement element = nav_bar.findElement(By.className("UIAStaticText"));
             //wait.until(ExpectedConditions.textToBePresentInElement(element,"All Groups"));
