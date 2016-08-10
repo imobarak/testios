@@ -5,8 +5,10 @@
             <run>
                 <include name="mainSimulator" />
                 <include name="adminLogin" />
-                <!--include name="newsfeed" /-->
+                <include name="newsfeed" />
                 <include name="groupsTab" />
+                <!--include name="adminPanel" /-->
+
                 <!--include name="requestsTab" />
                 <include name="contactsTab" />
                 <include name="notificationsTab" />
@@ -18,11 +20,7 @@
         <classes>
             <class name="com.projecttoe.app.AppTest">
                 <methods>
-                    <include name="adminLogin" />
-                    <include name="goToGroupsTab" />
-                    <include name="searchGroup" />
-                    <!--exclude name="commentPost"/>
-                    <exclude name="loadNewsfeed"/-->
+                    <exclude name="searchGroup"/> <!--after changing UISearchController: cannot click on cell to go to group details -->
                 </methods>
             </class>
         </classes>
