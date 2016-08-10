@@ -1,0 +1,168 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Group Test Suite" verbose="1">
+    <test name="Simulator Test" preserve-order="true" enabled="true">
+        <groups>
+            <run>
+                <include name="mainSimulator" />
+                <include name="adminLogin" />
+                <!--include name="newsfeed" /-->
+                <include name="groupsTab" />
+                <!--include name="requestsTab" />
+                <include name="contactsTab" />
+                <include name="notificationsTab" />
+                <include name="adminPanel" /-->
+                <!--include name="signup" /-->
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                    <include name="adminLogin" />
+                    <include name="goToGroupsTab" />
+                    <include name="searchGroup" />
+                    <!--exclude name="commentPost"/>
+                    <exclude name="loadNewsfeed"/-->
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!--test name="Signup Test" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="signup" />
+                <include name="logout" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Group tab Test" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="adminLogin" />
+                <include name="groupsTab" />
+                <include name="adminPanel"/>
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                    <exclude name="loadGroups" />
+                    <exclude name="addGroup" />
+                    <exclude name="canWriteReview" />
+                    <exclude name="canAddRemoveHelper"/>
+                    <exclude name="canTogglePrivateSwitch"/>
+                    <exclude name="canChangeGroupKeywords"/>
+                    <exclude name="canBroadcastMessage"/>
+                    <exclude name="checkGroupDetails"/>
+                    <exclude name="checkPremiumGroup"/>
+                    <exclude name="canBlockUnblockUsers"/>
+                    <exclude name="nonPremiumHelperSwitch"/>
+                    <exclude name="canAddPending"/>
+
+                    <exclude name="searchGroup"/> <!after changing UISearchController: cannot click on cell to go to group details >
+
+
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Setup and nonadmin testing" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="nonadminLogin" />
+                <include name="setup" />
+                <include name="groupsTabNonadmin"/>
+                <include name="logout" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+    <test name="Main Test" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="loginIssues" />
+                <include name="adminLogin" />
+                <include name="newsfeed" />
+                <include name="groupsTab" />
+                <include name="requestsTab" />
+                <include name="contactsTab" />
+                <include name="notificationsTab" />
+                <include name="adminPanel" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Demo2-Chats" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="adminLogin" />
+                <include name="contactsTab" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test name="Demo Test" preserve-order="true" enabled="false">
+        <groups>
+            <run>
+                <include name="main" />
+                <include name="loginIssues" />
+                <include name="adminLogin" />
+                <include name="newsfeed" />
+                <include name="groupsTab" />
+                <include name="requestsTab" />
+                <include name="contactsTab" />
+                <include name="notificationsTab" />
+                <include name="adminPanel" />
+                <!include name="signup" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.projecttoe.app.AppTest">
+                <methods>
+                </methods>
+            </class>
+        </classes>
+    </test-->
+
+
+
+</suite>
