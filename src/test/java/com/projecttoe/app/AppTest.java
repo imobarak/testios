@@ -44,9 +44,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import org.testng.annotations.*;
 import org.testng.Assert.*;
-
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import static org.testng.Assert.*;
 import static org.testng.Assert.assertTrue;
+
 
 /**
  * Created by imobarak on 3/31/16.
@@ -76,11 +80,16 @@ public class AppTest {
     @BeforeTest(groups = "mainSimulator")
     public void setupSimulator() throws MalformedURLException {
         log.setLevel(Level.INFO);
-
+        try {
+            //get app path from testSettings.properties
+            getPropValues();
+        } catch (IOException e) {
+            log.fatal("Could not find app file in path: " + appPath);
+        }
         capabilities = new DesiredCapabilities();
        // capabilities.setCapability("app", "/Users/imobarak/Microdoers/ipa/Project Toe.app");
 
-        capabilities.setCapability("app", "/Users/imobarak/Microdoers/PToePodsIssue/layeratlas3/projecttoe-ios/Build/Products/Debug - Dev-iphonesimulator/Project Toe.app");
+        capabilities.setCapability("app", appPath);
         capabilities.setCapability("platformName", "iOS");
         capabilities.setCapability("platformVersion", 9.3);
         capabilities.setCapability("deviceName", "iPhone 5");
@@ -220,16 +229,20 @@ public class AppTest {
 
         }
         if(nav_bar.getAttribute("name").equals("Newsfeed")) {
-
+        log.info("Click:Post");
             nav_bar.findElement(By.name("Post")).click();
             wait = new WebDriverWait(driver, 45);
+            log.info("wait until nav title = All Groups");
             wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//UIANavigationBar/UIAStaticText"), "All Groups"));
+
             WebElement element = nav_bar.findElement(By.className("UIAStaticText"));
             //wait.until(ExpectedConditions.textToBePresentInElement(element,"All Groups"));
             postDate = new SimpleDateFormat("dd-MM-YY hh:mm").format(new Date());
-
+            log.info("write text message");
             driver.findElementByClassName("UIATextView").sendKeys("automated post " + postDate);
+            log.info("click:Post");
             nav_bar.findElement(By.name("Post")).click();
+            log.info("wait until nav title = Newsfeed");
             wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//UIANavigationBar/UIAStaticText"), "Newsfeed"));
             log.info("Making a new post successful");
             checkPostSuccessful();
@@ -279,6 +292,7 @@ public class AppTest {
             List<MobileElement> rows = table.findElementsByClassName("UIATableCell");
             WebElement element = rows.get(0).findElements(By.className("UIAButton")).get(2);
             Integer numOfHugsBefore =Integer.parseInt(element.getText().substring(0,1));
+            log.info("Top post current hugs = "+numOfHugsBefore);
             MobileElement button =rows.get(0).findElements(By.className("UIAButton")).get(1);
             //MobileElement button = rows.get(0).findElement(By.xpath("//button[@name='hug default' and not(@disabled)]"));
             Actions moveTo = new Actions(driver);
@@ -286,7 +300,7 @@ public class AppTest {
 
             Integer numOfHugsAfter = Integer.parseInt(element.getText().substring(0, 1));
             assertEquals(new Long(numOfHugsAfter), new Long(numOfHugsBefore + 1));
-            log.info("Like post successful");
+            log.info("Like post successful. Hugs now = "+ numOfHugsAfter);
         } else
             fail("Failed to start test. Not on correct page due to failure from previous tests.");
         endTestCase("hugPost");
@@ -317,6 +331,7 @@ public class AppTest {
             //first view in UICatalog is a table
             Integer numOfCellsBefore = ((List<MobileElement>) driver.findElementsByXPath("//UIATableView[1]/UIATableCell")).size();
             table = (IOSElement) driver.findElementsByClassName("UIATableView").get(1);
+            log.info("Current row size in post = " + numOfCellsBefore);
             rows = table.findElementsByClassName("UIATableCell");
             rows.get(0).findElement(By.className("UIATextView")).sendKeys("Comment through Appium " + postDate);
             rows.get(0).findElement(By.className("UIAButton")).click();
@@ -324,6 +339,8 @@ public class AppTest {
             table = (IOSElement) driver.findElementsByClassName("UIATableView").get(0);
             rows = table.findElementsByClassName("UIATableCell");
             assertEquals(numOfCellsBefore + 1, rows.size());
+            log.info("after adding comment row size in post = " + rows.size());
+
             log.info("comment post successful");
         } else
             fail("Failed to start test. Not on correct page due to failure from previous tests.");
@@ -336,12 +353,13 @@ public class AppTest {
         //replace here to make test fail
         nav_bar = driver.findElementByClassName("UIANavigationBar");
         tab_bar = driver.findElementByClassName("UIATabBar");
-startTestCase("goToGroupsTab");
+        startTestCase("goToGroupsTab");
         tab_bar.findElement(By.name("Groups")).click();
         assertTrue(tab_bar.findElement(By.name("Groups")).isSelected());
+        log.info("Click: Group icon in tab");
         nav_bar = driver.findElementByClassName("UIANavigationBar");
         assertEquals(nav_bar.findElement(By.className("UIAStaticText")).getText(), "Support Groups");
-    endTestCase("goToGroupsTab");
+        endTestCase("goToGroupsTab");
     }
 
     @Test(groups = "groupsTab",  priority = 21, enabled = true)
@@ -359,7 +377,7 @@ startTestCase("goToGroupsTab");
             List<MobileElement> tableGroups = driver.findElements(By.xpath("//UIATableView/UIATableGroup"));
             //assert that there are 3 sections
             assertEquals(tableGroups.size(), 3);
-
+            log.info("TableGroups count correct");
             //assert that this section exists
             WebElement supportGroups = driver.findElementByName("YOUR SUPPORT GROUPS");
             assertNotNull(supportGroups);
@@ -367,7 +385,7 @@ startTestCase("goToGroupsTab");
             //assert that there are groups under this section - not empty
             List<MobileElement> cells = driver.findElements(By.xpath("//UIATableCell[preceding-sibling::UIATableGroup[1]/@name = 'YOUR SUPPORT GROUPS']"));
             assertNotEquals(cells.size(), 0);
-
+            log.info("Your support groups = "+cells.size());
             //assert that this section exists
             supportGroups = driver.findElementByName("RECOMMENDED SUPPORT GROUPS");
             assertNotNull(supportGroups);
@@ -375,6 +393,7 @@ startTestCase("goToGroupsTab");
             //assert that there are groups under this section - not empty
             cells = driver.findElements(By.xpath("//UIATableCell[preceding-sibling::UIATableGroup[1]/@name = 'RECOMMENDED SUPPORT GROUPS']"));
             assertNotEquals(cells.size(), 0);
+            log.info("Recommended support groups currently loaded = "+cells.size());
         } else
             fail("Failed to start test. Not on correct page due to failure from previous tests.");
 
@@ -435,7 +454,7 @@ startTestCase("goToGroupsTab");
         tableCells.get(3).findElementByClassName("UIATextView").sendKeys("Appium keywords");
         tableCells.get(4).findElementByClassName("UIASwitch").click();
         tableCells.get(5).findElementByName("Add").click();
-
+        log.info("Filled info. Click: Add");
         try{
             //handling alert
             WebDriverWait wait = new WebDriverWait(driver, 15);
@@ -451,9 +470,11 @@ startTestCase("goToGroupsTab");
             wait = new WebDriverWait(driver, 15);
             wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Ready to add \"Helpers?\"")));
             driver.findElementByName("No Thanks").click();
-
+            log.info("ready to add helpers? Click: No thanks");
             wait.until(ExpectedConditions.presenceOfElementLocated(By.name("Want us to get you members faster by promoting your Group?")));
             driver.findElementByName("No Thanks").click();
+            log.info("promote your group? Click: No thanks");
+
         }catch (Exception e){
             fail("Did not add group successfully");
             throw e;
@@ -1111,4 +1132,33 @@ endTestCase("canBlockUnblockUsers");
         log.info("####################################################################");
 
     }
-}
+
+
+        String appPath = "";
+        InputStream inputStream;
+
+        public void getPropValues() throws IOException {
+
+            try {
+                Properties prop = new Properties();
+                String propFileName = "testSettings.properties";
+
+                inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+
+                if (inputStream != null) {
+                    prop.load(inputStream);
+                } else {
+                    throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+                }
+
+
+                appPath = prop.getProperty("testSettings.appPath");
+
+            } catch (Exception e) {
+                System.out.println("Exception: " + e);
+            } finally {
+                inputStream.close();
+            }
+        }
+    }
+

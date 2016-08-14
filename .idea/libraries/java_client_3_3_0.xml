@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="java-client-3.3.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../ProjectToeTestDependancies/java-client-3.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../ProjectToeTestDependancies/selenium-server-standalone-2.53.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
