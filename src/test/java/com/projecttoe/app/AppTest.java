@@ -20,8 +20,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
-
-
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
 import java.net.MalformedURLException;
 
 import org.openqa.selenium.*;
@@ -77,8 +78,36 @@ public class AppTest {
     //but in our case they depend on login to continue
     // @BeforeGroups("allTests")
 
+    private  Process process;
+    private  String APPIUMSERVERSTART = "/usr/local/bin/appium";
+
+    public void startAppiumServer() throws IOException, InterruptedException {
+
+
+        CommandLine command = new CommandLine("/Applications/Appium.app/Contents/Resources/node/bin/node");
+        command.addArgument("/Applications/Appium.app/Contents/Resources/node_modules/appium/bin/appium.js", false);
+        command.addArgument("--address", false);
+        command.addArgument("127.0.0.1");
+        command.addArgument("--port", false);
+        command.addArgument("4723");
+        command.addArgument("--full-reset", false);
+        DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+        DefaultExecutor executor = new DefaultExecutor();
+        executor.setExitValue(1);
+        executor.execute(command, resultHandler);
+
+        Thread.sleep(5000);
+        System.out.println("Appium server started");
+    }
+
+    public  void stopAppiumServer() throws IOException {
+        String[] command ={"/usr/bin/killall","-KILL","node"};
+        Runtime.getRuntime().exec(command);
+        System.out.println("Appium server stop");
+    }
+
     @BeforeTest(groups = "mainSimulator")
-    public void setupSimulator() throws MalformedURLException {
+    public void setupSimulator() throws IOException, InterruptedException {
         log.setLevel(Level.INFO);
         try {
             //get app path from testSettings.properties
@@ -86,6 +115,8 @@ public class AppTest {
         } catch (IOException e) {
             log.fatal("Could not find app file in path: " + appPath);
         }
+
+        //startAppiumServer();
         capabilities = new DesiredCapabilities();
        // capabilities.setCapability("app", "/Users/imobarak/Microdoers/ipa/Project Toe.app");
 
@@ -121,7 +152,8 @@ public class AppTest {
     }
     //@AfterTest(groups = "allTests", alwaysRun = true )
     @AfterTest(groups ="mainSimulator" , alwaysRun = true )
-    public void teardown(){
+    public void teardown() throws IOException {
+        //stopAppiumServer();
         driver.quit();
         log.info("clean up done");
     }
