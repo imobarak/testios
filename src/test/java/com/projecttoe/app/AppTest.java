@@ -130,7 +130,7 @@ public class AppTest {
         capabilities.setCapability("nativeInstrumentsLib", true);
         log.info("Starting simulator setup: desired capabilities = " + capabilities.toString());
         //capabilities.setCapability("waitForAppScript", "if (target.frontMostApp().alert().name()=='\"Project Toe\" Would Like to Send You Notifications') {$.acceptAlert(); true;}");
-        driver = new IOSDriver(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
+        driver = new IOSDriver(new URL("http://127.0.0.1:4788/wd/hub"), capabilities);
         try{
             log.info("waiting for push notifications ios alert to accept.");
             //accepting push notifications
